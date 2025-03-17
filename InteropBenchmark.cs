@@ -26,6 +26,9 @@ public partial class InteropBenchMark
     [DllImport("/app/src/libmatrix_operations.so", CallingConvention = CallingConvention.Cdecl)]
     public static extern void MultiplyMatrices(int n, double[] A, double[] B, double[] C);
 
+    [DllImport("/app/src/libmatrix_operations.so", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void MultiplyMatrices_NEON(int n, double[] A, double[] B, double[] C);
+
     [Benchmark]
     public void CSharpMatrixMultiplication()
     {
@@ -49,6 +52,12 @@ public partial class InteropBenchMark
     }
 
     [Benchmark]
+    public void CMatrixMultiplicationNEON()
+    {
+        MultiplyMatrices_NEON(MatrixSize, A, B, C);
+    }
+
+    [Benchmark]
     public void CSharpMatrixMultiplicationSIMD()
     {
         int vectorSize = Vector<double>.Count;
@@ -58,7 +67,7 @@ public partial class InteropBenchMark
             {
                 Vector<double> sumVector = Vector<double>.Zero;
                 int k = 0;
-                
+
                 for (; k <= MatrixSize - vectorSize; k += vectorSize)
                 {
                     var va = new Vector<double>(A, i * MatrixSize + k);
