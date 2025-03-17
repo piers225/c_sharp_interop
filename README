@@ -1,0 +1,31 @@
+README: Matrix Multiplication Library
+
+This project provides a high-performance C shared library (libmatrix_operations.so) for matrix multiplication, optimized with GCC optimizations (-O3) and position-independent code (-fPIC).
+🚀 Building the Shared Library
+
+Run the following command to compile:
+
+make
+
+This will generate libmatrix_operations.so.
+🧹 Cleaning Up
+
+To remove the compiled library:
+
+make clean
+
+🔗 Usage in .NET (P/Invoke)
+
+In your C# code, reference the shared library:
+
+[DllImport("libmatrix_operations.so", CallingConvention = CallingConvention.Cdecl)]
+public static extern void MultiplyMatrices(int n, double[] A, double[] B, double[] C);
+
+📌 Running .NET Benchmark
+
+Ensure the shared library is in your path:
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)
+dotnet run -c Release
+
+Now you're ready to benchmark C vs. .NET SIMD performance! 🚀
